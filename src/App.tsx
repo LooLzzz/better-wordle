@@ -1,34 +1,46 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { Button, Space, Stack } from '@mantine/core'
+import { useRef } from 'react'
+
+import { FloatingKeyboard, WordsGuesser } from '@/components'
+import { useWordleStore } from '@/hooks'
+
 import './App.css'
 
+
 function App() {
-  const [count, setCount] = useState(0)
+  const [
+    targetWord,
+    resetStore,
+  ] = useWordleStore((state) => [
+    state.targetWord,
+    state.resetStore,
+  ])
+
+  const buttonRef = useRef<HTMLButtonElement>(null)
+
+  const onResetStore = () => {
+    resetStore()
+    buttonRef.current?.blur()
+  }
 
   return (
-    <>
+    <Stack h='100%'>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+        <Button ref={buttonRef} onClick={onResetStore}>
+          Reset
+        </Button>
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+
+      <div>
+        the word is: {targetWord}
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+
+      <WordsGuesser />
+
+      <Space flex={1} />
+
+      <FloatingKeyboard />
+    </Stack>
   )
 }
 
