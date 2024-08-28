@@ -6,12 +6,12 @@
   -webkit-user-select: none;
 
   transition: background-color 0.15s ease;
-}
 
-.kbd:hover {
-  background-color: var(--mantine-color-default-hover);
-}
+  &:hover {
+    background-color: var(--mantine-color-default-hover);
+  }
 
-.kbd:active {
-  background-color: var(--mantine-color-body) !important;
+  &:active, &[data-active="true"] {
+    background-color: var(--mantine-color-body);
+  }
 }

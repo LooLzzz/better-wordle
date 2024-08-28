@@ -1,4 +1,4 @@
-import { Button, Space, Stack } from '@mantine/core'
+import { Box, Button, Stack } from '@mantine/core'
 import { useRef } from 'react'
 
 import { FloatingKeyboard, WordsGuesser } from '@/components'
@@ -9,10 +9,8 @@ import './App.css'
 
 function App() {
   const [
-    targetWord,
     resetStore,
   ] = useWordleStore((state) => [
-    state.targetWord,
     state.resetStore,
   ])
 
@@ -24,20 +22,20 @@ function App() {
   }
 
   return (
-    <Stack h='100%'>
+    <Stack h='100%' align='center' justify='space-around'>
       <div>
         <Button ref={buttonRef} onClick={onResetStore}>
           Reset
         </Button>
       </div>
 
-      <div>
-        the word is: {targetWord}
-      </div>
+      {/* <div>
+        the word is: {answer}
+      </div> */}
 
-      <WordsGuesser />
-
-      <Space flex={1} />
+      <Box h='100%' mah='60rem' style={{ justifySelf: 'start' }}>
+        <WordsGuesser />
+      </Box>
 
       <FloatingKeyboard />
     </Stack>

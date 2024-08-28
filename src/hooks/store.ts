@@ -4,25 +4,25 @@ import { devtools, persist } from 'zustand/middleware'
 import answerList from '@/assets/answerlist.json'
 
 interface WordleState {
-  targetWord: string
-  guessedWords: string[]
-  currentWord: (null | string)[]
+  answer: string
+  guesses: string[]
+  currentGuess: (null | string)[]
 
   resetStore: () => void
 
-  addLetterToCurrentWord: (letter: string, idx?: number) => void
-  removeLetterFromCurrentWord: (idx?: number) => void
-  addPastGuess: (word: string) => void
-  clearCurrentWord: () => void
+  addLetterToCurrentGuess: (letter: string, idx?: number) => void
+  removeLetterFromCurrentGuess: (idx?: number) => void
+  submitCurrentGuess: () => void
+  clearCurrentGuess: () => void
 }
 
 
 const generateRandomWord = () => answerList[Math.floor(Math.random() * answerList.length)]
 
-const initialState: Pick<WordleState, 'targetWord' | 'guessedWords' | 'currentWord'> = {
-  targetWord: null as any,
-  guessedWords: [],
-  currentWord: [null, null, null, null, null],
+const initialState: Pick<WordleState, 'answer' | 'guesses' | 'currentGuess'> = {
+  answer: null as any,
+  guesses: [],
+  currentGuess: [null, null, null, null, null],
 }
 
 const useWordleStore = create<WordleState>()(
@@ -33,25 +33,31 @@ const useWordleStore = create<WordleState>()(
 
         resetStore: () => set({
           ...initialState,
-          targetWord: generateRandomWord(),
+          answer: generateRandomWord(),
         }),
 
-        addLetterToCurrentWord: (letter, idx = undefined) => set(({ currentWord }) => {
+        addLetterToCurrentGuess: (letter, idx = undefined) => set(({ currentGuess }) => {
           if (idx === undefined) (
-            idx = currentWord.findIndex(v => !v)
+            idx = currentGuess.findIndex(v => !v)
           )
-          return { currentWord: currentWord.map((v, i) => i === idx ? letter.toLowerCase() : v) }
+          return { currentGuess: currentGuess.map((v, i) => i === idx ? letter.toLowerCase() : v) }
         }),
 
-        removeLetterFromCurrentWord: (idx = undefined) => set(({ currentWord }) => {
+        removeLetterFromCurrentGuess: (idx = undefined) => set(({ currentGuess }) => {
           if (idx === undefined) {
-            idx = currentWord.length - currentWord.slice().reverse().findIndex(v => v) - 1
+            idx = currentGuess.length - currentGuess.slice().reverse().findIndex(v => v) - 1
           }
-          return { currentWord: currentWord.map((v, i) => i === idx ? null : v) }
+          return { currentGuess: currentGuess.map((v, i) => i === idx ? null : v) }
         }),
 
-        clearCurrentWord: () => set({ currentWord: [null, null, null, null, null] }),
-        addPastGuess: (word) => set((state) => ({ guessedWords: [...state?.guessedWords, word] })),
+        clearCurrentGuess: () => set({ currentGuess: [null, null, null, null, null] }),
+        submitCurrentGuess: () => set((state) => ({
+          guesses: [
+            ...state?.guesses,
+            state.currentGuess.join('')
+          ],
+          currentGuess: [null, null, null, null, null],
+        })),
       }),
       {
         name: 'better-wordle-store',
@@ -60,8 +66,8 @@ const useWordleStore = create<WordleState>()(
   )
 )
 
-if (!useWordleStore.getState()?.targetWord) {
-  useWordleStore.setState({ targetWord: generateRandomWord() })
+if (!useWordleStore.getState()?.answer) {
+  useWordleStore.setState({ answer: generateRandomWord() })
 }
 
 export {

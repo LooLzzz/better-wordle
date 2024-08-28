@@ -1,39 +1,101 @@
 import { Group, Kbd, Stack } from '@mantine/core'
+import { useEffect, useMemo, useRef } from 'react'
 
 import { useWordleStore } from '@/hooks'
 
-import classes from './index.module.css'
+import classes from './index.module.scss'
 
 
 const keyboardRows = [
-  ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
-  ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
-  ['Enter', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', 'Backspace'],
+  ['q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p'],
+  ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+  ['Enter', 'z', 'x', 'c', 'v', 'b', 'n', 'm', 'Backspace'],
 ]
 
 
 const FloatingKeyboard = () => {
   const [
-    targetWord,
-    guessedWords,
+    answer,
+    guesses,
   ] = useWordleStore((state) => [
-    state.targetWord,
-    state.guessedWords,
+    state.answer,
+    state.guesses,
   ])
 
-  const deadLetters = (
-    guessedWords
-      .join('')
-      .split('')
-      .filter((letter) => !targetWord.includes(letter))
-      .map((letter) => letter.toUpperCase())
+  const keyRefs = Object.fromEntries(
+    keyboardRows
+      .flat()
+      .map((key) => [key, useRef<HTMLButtonElement>(null)])
   )
 
-  const handleClick = (key: string) => {
-    window.dispatchEvent(new KeyboardEvent('keydown', { key }))
+  const deadLetters = useMemo(() => (
+    new Set(
+      guesses
+        .join('')
+        .split('')
+        .filter((letter) => !answer.includes(letter))
+        .map((letter) => letter)
+    )
+  ), [answer, guesses])
+
+  const correctLetters = useMemo(() => (
+    new Set(
+      guesses
+        .join('')
+        .split('')
+        .filter((letter) => answer.includes(letter))
+        .map((letter) => letter)
+    )
+  ), [answer, guesses])
+
+  const perfectLetters = useMemo(() => (
+    new Set(
+      guesses
+        .map((guess) => guess.split(''))
+        .flatMap((guess) => guess.map((letter, idx) => [letter, letter === answer[idx]]))
+        .filter(([, isCorrect]) => isCorrect)
+        .map(([letter]) => letter)
+    )
+  ), [answer, guesses])
+
+  const generateLetterBg = (letter: string) => {
+    if (perfectLetters.has(letter)) {
+      return 'var(--mantine-color-green-8)'
+    } else if (correctLetters.has(letter)) {
+      return 'var(--mantine-color-yellow-9)'
+    } else if (deadLetters.has(letter)) {
+      return 'var(--mantine-color-dimmed)'
+    } else {
+      return undefined
+    }
   }
 
-  console.log('classes', classes)
+  const handleClick = (key: string) => {
+    window.dispatchEvent(
+      new KeyboardEvent('keydown', { key })
+    )
+    window.dispatchEvent(
+      new KeyboardEvent('keyup', { key })
+    )
+  }
+
+  const handleKeyDown = ({ key }: KeyboardEvent) => {
+    keyRefs[key]?.current?.setAttribute('data-active', 'true')
+  }
+
+  const handleKeyUp = ({ key }: KeyboardEvent) => {
+    keyRefs[key]?.current?.removeAttribute('data-active')
+  }
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown)
+    window.addEventListener('keyup', handleKeyUp)
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown)
+      window.removeEventListener('keyup', handleKeyUp)
+    }
+  }, [])
 
   return (
     <Stack gap='xs' align='center'>
@@ -43,11 +105,14 @@ const FloatingKeyboard = () => {
             {
               row.map((key) => (
                 <Kbd
-                  className={classes.kbd}
                   key={key}
+                  ref={keyRefs[key]}
+                  className={classes.kbd}
                   size='xl'
-                  bg={deadLetters.includes(key) ? 'var(--mantine-color-dimmed)' : undefined}
+                  fz='h3'
+                  bg={generateLetterBg(key)}
                   onClick={() => handleClick(key)}
+                  tt={key.length === 1 ? 'uppercase' : undefined}
                 >
                   {
                     key === 'Backspace'

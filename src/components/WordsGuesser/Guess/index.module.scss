@@ -1,0 +1,26 @@
+.letterContainer {
+    width: 5rem;
+    height: 5rem;
+    border: 1px solid var(--mantine-color-default-border);
+    transition: all 0.3s;
+    text-transform: uppercase;
+
+    // & > {
+    //     user-select: none;
+    //     -moz-user-select: none;
+    //     -webkit-user-select: none;
+    // }
+}
+
+.active {
+    background-color: var(--mantine-color-default);
+    cursor: pointer;
+
+    &:hover {
+        background-color: var(--mantine-color-default-hover);
+    }
+}
+
+.selected {
+    background-color: var(--mantine-color-gray-7) !important;
+}
