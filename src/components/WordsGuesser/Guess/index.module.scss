@@ -1,15 +1,58 @@
-.letterContainer {
+$reveal-anim-duration-sec: 0.35;
+$reveal-anim-duration: #{$reveal-anim-duration-sec}s;
+$reveal-anim-timing-function: ease;
+
+@keyframes reveal-anim {
+    // 0% {
+    //     transform: scaleY(1);
+    // }
+
+    0% {
+        transform: scaleY(0);
+    }
+
+    100% {
+        transform: scaleY(1);
+    }
+}
+
+
+@for $i from 1 through 10 {
+    .lettersContainer .reveal:nth-child(#{$i}n) {
+        animation-delay: #{($i - 1) * $reveal-anim-duration-sec}s;
+        transition-delay: #{($i - 1) * $reveal-anim-duration-sec}s;
+    }
+}
+
+.letter {
     width: 5rem;
     height: 5rem;
     border: 1px solid var(--mantine-color-default-border);
-    transition: all 0.3s;
     text-transform: uppercase;
 
-    // & > {
-    //     user-select: none;
-    //     -moz-user-select: none;
-    //     -webkit-user-select: none;
-    // }
+    @media screen and (max-width: 768px) {
+        width: 3.5rem;
+        height: 3.5rem;
+    }
+
+    &[data-letter-state="perfect"] {
+        background-color: var(--mantine-color-green-9);
+    }
+
+    &[data-letter-state="correct"] {
+        background-color: var(--mantine-color-yellow-9);
+    }
+
+    &[data-letter-state="incorrect"] {
+        background-color: var(--mantine-color-gray-8);
+    }
+}
+
+.reveal {
+    animation: reveal-anim $reveal-anim-duration;
+    transition: background-color $reveal-anim-duration;
+    animation-iteration-count: 1;
+    animation-timing-function: $reveal-anim-timing-function;
 }
 
 .active {

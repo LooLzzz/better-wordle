@@ -1,3 +1,9 @@
+body {
+  touch-action: pan-x pan-y;
+}
+
 #root {
-  height: 100lvh;
+  height: 100dvh;
+  touch-action: pan-x pan-y;
+  padding: 0 0;
 }

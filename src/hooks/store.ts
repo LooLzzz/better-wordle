@@ -70,6 +70,10 @@ if (!useWordleStore.getState()?.answer) {
   useWordleStore.setState({ answer: generateRandomWord() })
 }
 
+if (useWordleStore.getState()?.guesses.at(-1) === useWordleStore.getState()?.answer) {
+  useWordleStore.getState().resetStore()
+}
+
 export {
   useWordleStore as default,
   type WordleState

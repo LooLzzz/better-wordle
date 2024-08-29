@@ -24,7 +24,11 @@ createRoot(document.getElementById('root')!).render(
       colorSchemeManager={colorSchemeManager}
       theme={theme}
     >
-      <Notifications  />
+      <Notifications
+        position='top-center'
+        autoClose={2000}
+        limit={2}
+      />
       <App />
     </MantineProvider>
   </StrictMode>,

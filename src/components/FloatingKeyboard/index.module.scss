@@ -1,4 +1,6 @@
 .kbd {
+  font-size: 2rem !important;
+  padding: 0rem 0.5rem !important;
   cursor: pointer;
   user-select: none;
   -ms-user-select: none;
@@ -7,11 +9,17 @@
 
   transition: background-color 0.15s ease;
 
+  @media screen and (max-width: 768px) {
+    font-size: 1.75rem !important;
+    padding: 0rem 0.5rem !important;
+  }
+
   &:hover {
     background-color: var(--mantine-color-default-hover);
   }
 
-  &:active, &[data-active="true"] {
+  &:active,
+  &[data-active="true"] {
     background-color: var(--mantine-color-body);
   }
 }

@@ -1,5 +1,10 @@
-import answerList from '@/assets/answerlist.json'
-import wordList from '@/assets/wordlist.json'
+// @ts-ignore
+export { default as BackspaceIcon } from './backspace.svg?react'
+// @ts-ignore
+export { default as LoginIcon } from './login.svg?react'
+
+import answerList from './answerlist.json'
+import wordList from './wordlist.json'
 
 const wordsSet = new Set<string>(wordList)
 const answersSet = new Set<string>(answerList)
