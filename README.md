@@ -1,50 +1,20 @@
-# React + TypeScript + Vite
+# Better Wordle
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Description
 
-Currently, two official plugins are available:
+This is an implementation of the popular word-guessing game Wordle with my own twist.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Objective
 
-## Expanding the ESLint configuration
+Wordle is a popular word-guessing game where players try to guess a hidden word by making guesses and receiving feedback on their guesses.  
+The game provides clues in the form of colored squares, indicating whether a guessed letter is correct and in the correct position (usually marked with a green square) or correct but in the wrong position (usually marked with a yellow square).  
+The objective is to guess the word within a limited number of  attempts.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Features
 
-- Configure the top-level `parserOptions` property like this:
+All the normal Wordle features and rules are present, with the following additional features:
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
-
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
-
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+- Clicking on a box will highlight it and pressing a key will fill the highlighted box with the corresponding letter.
+- Pressing the Backspace key will clear the highlighted box.
+- Pressing left or right arrow keys will move the highlight left or right.
+- Pressing the Escape key will clear the selection.

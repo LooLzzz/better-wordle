@@ -1,12 +1,8 @@
-$reveal-anim-duration-sec: 0.35;
-$reveal-anim-duration: #{$reveal-anim-duration-sec}s;
+$reveal-anim-duration-ms: 350;
+$reveal-anim-duration: #{$reveal-anim-duration-ms}ms;
 $reveal-anim-timing-function: ease;
 
 @keyframes reveal-anim {
-    // 0% {
-    //     transform: scaleY(1);
-    // }
-
     0% {
         transform: scaleY(0);
     }
@@ -16,11 +12,10 @@ $reveal-anim-timing-function: ease;
     }
 }
 
-
-@for $i from 1 through 10 {
+@for $i from 1 through 6 {
     .lettersContainer .reveal:nth-child(#{$i}n) {
-        animation-delay: #{($i - 1) * $reveal-anim-duration-sec}s;
-        transition-delay: #{($i - 1) * $reveal-anim-duration-sec}s;
+        animation-delay: #{($i - 1) * $reveal-anim-duration-ms}ms;
+        transition-delay: #{($i - 1) * $reveal-anim-duration-ms}ms;
     }
 }
 
@@ -29,6 +24,7 @@ $reveal-anim-timing-function: ease;
     height: 5rem;
     border: 1px solid var(--mantine-color-default-border);
     text-transform: uppercase;
+    transition: background-color 150ms;
 
     @media screen and (max-width: 768px) {
         width: 3.5rem;
@@ -50,7 +46,6 @@ $reveal-anim-timing-function: ease;
 
 .reveal {
     animation: reveal-anim $reveal-anim-duration;
-    transition: background-color $reveal-anim-duration;
     animation-iteration-count: 1;
     animation-timing-function: $reveal-anim-timing-function;
 }

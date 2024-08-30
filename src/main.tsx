@@ -26,7 +26,7 @@ createRoot(document.getElementById('root')!).render(
     >
       <Notifications
         position='top-center'
-        autoClose={2000}
+        autoClose={3000}
         limit={2}
       />
       <App />

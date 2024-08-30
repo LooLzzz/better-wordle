@@ -1,7 +1,7 @@
 import { Group, Kbd, Stack } from '@mantine/core'
 import { useEffect, useMemo, useRef } from 'react'
 
-import { BackspaceIcon, LoginIcon as EnterIcon } from '@/assets'
+import { BackspaceIcon, EnterIcon } from '@/assets'
 import { useWordleStore } from '@/hooks'
 
 import classes from './index.module.scss'
@@ -121,7 +121,7 @@ const FloatingKeyboard = () => {
                     key === 'Backspace'
                       ? <BackspaceIcon style={{ transform: 'translateY(0.25rem)' }} />
                       : key === 'Enter'
-                        ? <EnterIcon style={{ transform: 'translateY(0.25rem)' }} />
+                        ? <EnterIcon style={{ transform: 'translateY(0.3rem)' }} />
                         : key
                   }
                 </Kbd>
