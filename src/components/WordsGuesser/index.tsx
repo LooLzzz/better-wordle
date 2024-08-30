@@ -1,4 +1,5 @@
 import { Box, Button, Code, Modal, Stack, Text, Title } from '@mantine/core'
+import { useMediaQuery } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
 import { useCallback, useEffect, useState } from 'react'
 
@@ -29,6 +30,7 @@ const WordsGuesser = () => {
     state.resetStore,
   ])
 
+  const isXs = useMediaQuery('(max-width: 400px)')
   const [selectedIdx, setSelectedIdx] = useState<number | undefined>(undefined)
   const [shake, setShake] = useState(false)
 
@@ -46,6 +48,11 @@ const WordsGuesser = () => {
   }, [selectedIdx])
 
   const onKeyPress = useCallback((e: KeyboardEvent) => {
+    if (e.shiftKey && e.altKey && e.key.toUpperCase() === 'R') {
+      resetStore()
+      return
+    }
+
     if (answer === lastGuess || guesses.length === TOTAL_GUESSES)
       return
 
@@ -155,7 +162,7 @@ const WordsGuesser = () => {
         </Stack>
       </Modal>
 
-      <Stack h='100%' justify='space-evenly'>
+      <Stack h='100%' justify='space-evenly' gap={isXs ? 'xs' : 'md'}>
         {
           Array
             .from({ length: TOTAL_GUESSES })

@@ -1,9 +1,13 @@
-$reveal-anim-duration-ms: 350;
+$reveal-anim-duration-ms: 500;
 $reveal-anim-duration: #{$reveal-anim-duration-ms}ms;
-$reveal-anim-timing-function: ease;
+$reveal-anim-timing-function: ease-in-out;
 
 @keyframes reveal-anim {
     0% {
+        transform: scaleY(1);
+    }
+
+    50% {
         transform: scaleY(0);
     }
 
@@ -15,20 +19,29 @@ $reveal-anim-timing-function: ease;
 @for $i from 1 through 6 {
     .lettersContainer .reveal:nth-child(#{$i}n) {
         animation-delay: #{($i - 1) * $reveal-anim-duration-ms}ms;
-        transition-delay: #{($i - 1) * $reveal-anim-duration-ms}ms;
+        transition-delay: #{($i - 0.5) * $reveal-anim-duration-ms}ms;
     }
 }
 
 .letter {
+    font-size: 3rem;
     width: 5rem;
     height: 5rem;
     border: 1px solid var(--mantine-color-default-border);
     text-transform: uppercase;
-    transition: background-color 150ms;
+    transition-property: background-color, border-color;
+    transition-duration: 150ms;
 
     @media screen and (max-width: 768px) {
+        font-size: 2rem;
         width: 3.5rem;
         height: 3.5rem;
+    }
+
+    @media screen and (max-width: 400px) {
+        font-size: 1.5rem;
+        width: 2.75rem;
+        height: 2.75rem;
     }
 
     &[data-letter-state="perfect"] {
@@ -57,8 +70,13 @@ $reveal-anim-timing-function: ease;
     &:hover {
         background-color: var(--mantine-color-default-hover);
     }
-}
 
-.selected {
-    background-color: var(--mantine-color-gray-7) !important;
+    &.guessedLetter {
+        border-color: color-mix(in srgb, var(--mantine-color-default-border), #fff 20%);
+        // border-color: var(--mantine-color-gray-7);
+    }
+
+    &.selected {
+        background-color: var(--mantine-color-gray-7) !important;
+    }
 }

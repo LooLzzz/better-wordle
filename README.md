@@ -18,3 +18,4 @@ All the normal Wordle features and rules are present, with the following additio
 - Pressing the Backspace key will clear the highlighted box.
 - Pressing left or right arrow keys will move the highlight left or right.
 - Pressing the Escape key will clear the selection.
+- Pressing `Shift+Alt+R` will reset the game.

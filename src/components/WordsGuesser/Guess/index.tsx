@@ -54,14 +54,15 @@ const Guess = ({
             className={[
               classes.letter,
               active ? classes.active : '',
-              active && selectedIdx == idx ? classes.selected : '',
+              selectedIdx == idx ? classes.selected : '',
+              letter ? classes.guessedLetter : '',
               revealAnimation ? classes.reveal : '',
             ].join(' ')}
             radius='md'
             onClick={() => onSelectIdx?.(idx)}
             data-letter-state={getLetterState(letter, idx)}
           >
-            <Text fz='h1' fw='bold'>
+            <Text fz='inherit' fw='bold'>
               {letter}
             </Text>
           </Paper>
