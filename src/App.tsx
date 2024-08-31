@@ -9,7 +9,7 @@ import classes from './App.module.scss'
 
 function App() {
   const colorScheme = useComputedColorScheme()
-  const isXs = useMediaQuery('(max-width: 440px)')
+  const isXs = useMediaQuery('(max-width: 400px)')
   const [isSidebarOpened, { toggle: toggleSidebar, close: closeSidebar }] = useDisclosure(false)
 
   return (
@@ -27,8 +27,7 @@ function App() {
         zIndex={0}
         position={{
           top: 10,
-          left: isXs ? undefined : 10,
-          right: isXs ? 10 : undefined,
+          left: 10,
         }}
       >
         <Burger
