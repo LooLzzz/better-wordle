@@ -125,8 +125,16 @@ const WordsGuesser = () => {
           && e.key.length === 1
           && e.key.match(/[a-z]/i)
         ) {
-          addLetterToCurrentGuess(e.key, selectedIdx)
-          setSelectedIdx(undefined)
+          if (selectedIdx !== undefined) {
+            removeLetterFromCurrentGuess(selectedIdx)
+            setTimeout(() => {
+              addLetterToCurrentGuess(e.key, selectedIdx)
+            }, 10)
+            setSelectedIdx(undefined)
+          } else {
+            addLetterToCurrentGuess(e.key, selectedIdx)
+            setSelectedIdx(undefined)
+          }
         }
     }
   }, [lastGuess, currentGuess, currentGuessString, numberOfEmptyLetters, selectedIdx, wordsSet])

@@ -2,6 +2,10 @@ $reveal-anim-duration-ms: 500;
 $reveal-anim-duration: #{$reveal-anim-duration-ms}ms;
 $reveal-anim-timing-function: ease-in-out;
 
+$popout-anim-duration-ms: 150;
+$popout-anim-duration: #{$popout-anim-duration-ms}ms;
+$popout-anim-timing-function: ease;
+
 @keyframes reveal-anim {
     0% {
         transform: scaleY(1);
@@ -13,6 +17,16 @@ $reveal-anim-timing-function: ease-in-out;
 
     100% {
         transform: scaleY(1);
+    }
+}
+
+@keyframes popout-anim {
+    0% {
+        transform: scale(1.15);
+    }
+
+    100% {
+        transform: scale(1);
     }
 }
 
@@ -76,6 +90,9 @@ $reveal-anim-timing-function: ease-in-out;
 
     &.guessedLetter {
         border-color: var(--color-letter-filled-border);
+        animation: popout-anim $popout-anim-duration;
+        animation-iteration-count: 1;
+        animation-timing-function: $popout-anim-timing-function;
     }
 
     &.selected {
