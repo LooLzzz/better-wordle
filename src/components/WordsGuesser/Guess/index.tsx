@@ -32,16 +32,13 @@ const Guess = ({
 
     if (letter === answer.slice(idx, idx + 1)) {
       return 'perfect'
-      // return 'var(--mantine-color-green-9)'
     }
 
     if (answerLetters.includes(letter)) {
       return 'correct'
-      // return 'var(--mantine-color-yellow-9)'
     }
 
     return 'incorrect'
-    // return 'var(--mantine-color-gray-8)'
   }, [answer, answerLetters, active, isEmptyGuess])
 
   return (

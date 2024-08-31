@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 
-import answerList from '@/assets/answerlist.json'
+import { answersList } from '@/assets'
 
 interface WordleState {
   answer: string
@@ -17,7 +17,7 @@ interface WordleState {
 }
 
 
-const generateRandomWord = () => answerList[Math.floor(Math.random() * answerList.length)]
+const generateRandomWord = () => answersList[Math.floor(Math.random() * answersList.length)]
 
 const initialState: Pick<WordleState, 'answer' | 'guesses' | 'currentGuess'> = {
   answer: null as any,

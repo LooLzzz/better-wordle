@@ -59,13 +59,13 @@ const FloatingKeyboard = () => {
     )
   ), [answer, guesses])
 
-  const generateLetterBg = (letter: string) => {
+  const getLetterState = (letter: string) => {
     if (perfectLetters.has(letter)) {
-      return 'var(--mantine-color-green-9)'
+      return 'perfect'
     } else if (correctLetters.has(letter)) {
-      return 'var(--mantine-color-yellow-9)'
+      return 'correct'
     } else if (deadLetters.has(letter)) {
-      return 'var(--mantine-color-dimmed)'
+      return 'incorrect'
     } else {
       return undefined
     }
@@ -108,21 +108,21 @@ const FloatingKeyboard = () => {
         keyboardRows.map((row, idx) => (
           <Group key={idx} gap={5}>
             {
-              row.map((key) => (
+              row.map((letter) => (
                 <Kbd
-                  key={key}
-                  ref={keyRefs[key]}
+                  key={letter}
+                  ref={keyRefs[letter]}
                   className={classes.kbd}
-                  bg={generateLetterBg(key)}
-                  onClick={() => handleClick(key)}
-                  tt={key.length === 1 ? 'uppercase' : undefined}
+                  onClick={() => handleClick(letter)}
+                  tt={letter.length === 1 ? 'uppercase' : undefined}
+                  data-letter-state={getLetterState(letter)}
                 >
                   {
-                    key === 'Backspace'
+                    letter === 'Backspace'
                       ? <BackspaceIcon style={{ transform: 'translateY(0.25rem)' }} />
-                      : key === 'Enter'
+                      : letter === 'Enter'
                         ? <EnterIcon style={{ transform: 'translateY(0.3rem)' }} />
-                        : key
+                        : letter
                   }
                 </Kbd>
               ))

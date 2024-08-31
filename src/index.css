@@ -3,6 +3,7 @@ body {
 }
 
 #root {
+  transition: background-color 350ms ease;
   height: 100dvh;
   touch-action: pan-x pan-y;
   padding: 0 0;

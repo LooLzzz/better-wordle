@@ -29,7 +29,7 @@ $reveal-anim-timing-function: ease-in-out;
     height: 5rem;
     border: 1px solid var(--mantine-color-default-border);
     text-transform: uppercase;
-    transition-property: background-color, border-color;
+    transition-property: background-color, border-color, color;
     transition-duration: 150ms;
 
     @media screen and (max-width: 768px) {
@@ -45,15 +45,18 @@ $reveal-anim-timing-function: ease-in-out;
     }
 
     &[data-letter-state="perfect"] {
-        background-color: var(--mantine-color-green-9);
+        background-color: var(--color-letter-state-perfect);
+        color: var(--mantine-primary-color-contrast);
     }
 
     &[data-letter-state="correct"] {
-        background-color: var(--mantine-color-yellow-9);
+        background-color: var(--color-letter-state-correct);
+        color: var(--mantine-primary-color-contrast);
     }
 
     &[data-letter-state="incorrect"] {
-        background-color: var(--mantine-color-gray-8);
+        background-color: var(--color-letter-state-incorrect);
+        color: var(--mantine-primary-color-contrast);
     }
 }
 
@@ -72,11 +75,10 @@ $reveal-anim-timing-function: ease-in-out;
     }
 
     &.guessedLetter {
-        border-color: color-mix(in srgb, var(--mantine-color-default-border), #fff 20%);
-        // border-color: var(--mantine-color-gray-7);
+        border-color: var(--color-letter-filled-border);
     }
 
     &.selected {
-        background-color: var(--mantine-color-gray-7) !important;
+        background-color: var(--color-letter-selected) !important;
     }
 }

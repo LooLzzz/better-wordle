@@ -29,4 +29,19 @@
   &[data-active="true"] {
     background-color: var(--mantine-color-body);
   }
+
+  &[data-letter-state="perfect"] {
+    background-color: var(--color-letter-state-perfect);
+    color: var(--mantine-primary-color-contrast);
+  }
+
+  &[data-letter-state="correct"] {
+    background-color: var(--color-letter-state-correct);
+    color: var(--mantine-primary-color-contrast);
+  }
+
+  &[data-letter-state="incorrect"] {
+    background-color: var(--color-letter-state-incorrect-light);
+    color: var(--mantine-primary-color-contrast);
+  }
 }

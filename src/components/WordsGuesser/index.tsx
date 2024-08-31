@@ -85,6 +85,7 @@ const WordsGuesser = () => {
             }
           }
         }
+        e.preventDefault()
         break
 
       case 'Backspace':

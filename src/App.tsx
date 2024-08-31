@@ -1,22 +1,51 @@
-import { Box, Stack } from '@mantine/core'
+import { Affix, Box, Burger, Stack, useComputedColorScheme } from '@mantine/core'
+import { useDisclosure, useMediaQuery } from '@mantine/hooks'
+import { Helmet } from 'react-helmet'
 
-import { FloatingKeyboard, WordsGuesser } from '@/components'
+import { FloatingKeyboard, Sidebar, WordsGuesser } from '@/components'
 
 import classes from './App.module.scss'
-import { useMediaQuery } from '@mantine/hooks'
 
 
 function App() {
-  const isXs = useMediaQuery('(max-width: 400px)')
+  const colorScheme = useComputedColorScheme()
+  const isXs = useMediaQuery('(max-width: 440px)')
+  const [isSidebarOpened, { toggle: toggleSidebar, close: closeSidebar }] = useDisclosure(false)
 
   return (
-    <Stack className={classes.stack} h='100%' align='center' justify='center' gap={isXs ? 30 : 50}>
-      <Box mah='60rem' style={{ justifySelf: 'start' }}>
-        <WordsGuesser />
-      </Box>
+    <>
+      <Helmet>
+        <meta name='theme-color' content={colorScheme === 'dark' ? '#242424' : '#f1f3f5'} />
+      </Helmet>
 
-      <FloatingKeyboard />
-    </Stack>
+      <Sidebar
+        opened={isSidebarOpened}
+        onClose={closeSidebar}
+      />
+
+      <Affix
+        zIndex={0}
+        position={{
+          top: 10,
+          left: isXs ? undefined : 10,
+          right: isXs ? 10 : undefined,
+        }}
+      >
+        <Burger
+          opened={isSidebarOpened}
+          onClick={toggleSidebar}
+          opacity={0.6}
+        />
+      </Affix>
+
+      <Stack className={classes.stack} h='100%' align='center' justify='center' gap={isXs ? 30 : 50}>
+        <Box mah='60rem' style={{ justifySelf: 'start' }}>
+          <WordsGuesser />
+        </Box>
+
+        <FloatingKeyboard />
+      </Stack>
+    </>
   )
 }
 
