@@ -1,4 +1,4 @@
-import { Button, Code, Divider, Drawer, DrawerProps, Group, Stack, Switch, Text, TextInput, Title, useMantineColorScheme } from '@mantine/core'
+import { Button, Code, Divider, Drawer, DrawerProps, Stack, Switch, Text, Title, useMantineColorScheme } from '@mantine/core'
 
 import { MoonStarsIcon, SunIcon } from '@/assets'
 import { useWordleStore } from '@/hooks'
