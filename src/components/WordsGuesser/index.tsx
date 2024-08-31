@@ -33,6 +33,7 @@ const WordsGuesser = () => {
   const isXs = useMediaQuery('(max-width: 400px)')
   const [selectedIdx, setSelectedIdx] = useState<number | undefined>(undefined)
   const [shake, setShake] = useState(false)
+  const [isFirstGuessInSession, setIsFirstGuessInSession] = useState(true)
 
   const activeGuessIdx = guesses.length
   const lastGuess = guesses.at(-1)
@@ -63,6 +64,7 @@ const WordsGuesser = () => {
       case 'Enter':
         if (numberOfEmptyLetters === 0) {
           if (isGuessInWordsSet && !isAlreadyGuess) {
+            setIsFirstGuessInSession(false)
             submitCurrentGuess()
           } else {
             setShake(true)
@@ -186,7 +188,7 @@ const WordsGuesser = () => {
                     guessedLetters={isActive ? currentGuess : guesses[idx]?.split('')}
                     selectedIdx={isActive ? selectedIdx : undefined}
                     onSelectIdx={isActive ? handleSelectIdx : undefined}
-                    revealAnimation={idx === activeGuessIdx - 1}
+                    revealAnimation={!isFirstGuessInSession && idx === activeGuessIdx - 1}
                   />
                 </Box>
               )

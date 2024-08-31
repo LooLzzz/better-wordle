@@ -41,7 +41,6 @@ const theme = createTheme({
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <MantineProvider
-      defaultColorScheme='dark'
       colorSchemeManager={colorSchemeManager}
       cssVariablesResolver={cssResolver}
       theme={theme}
