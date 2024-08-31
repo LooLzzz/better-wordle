@@ -28,6 +28,8 @@
       "@/hooks/*": ["./src/hooks/*"],
       "@/assets": ["./src/assets"],
       "@/assets/*": ["./src/assets/*"],
+      "@/utils": ["./src/utils"],
+      "@/utils/*": ["./src/utils/*"],
     }
   },
   "include": ["src", "src/types.d.ts"]

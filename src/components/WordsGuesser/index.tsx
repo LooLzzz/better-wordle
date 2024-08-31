@@ -5,6 +5,7 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { wordsSet } from '@/assets'
 import { useWordleStore } from '@/hooks'
+import { humanReadableSeconds } from '@/utils'
 
 import Guess from './Guess'
 import classes from './index.module.scss'
@@ -16,6 +17,9 @@ const WordsGuesser = () => {
     answer,
     currentGuess,
     guesses,
+    time,
+    startTimer,
+    stopTimer,
     submitCurrentGuess,
     addLetterToCurrentGuess,
     removeLetterFromCurrentGuess,
@@ -24,6 +28,9 @@ const WordsGuesser = () => {
     state.answer,
     state.currentGuess,
     state.guesses,
+    state.time,
+    state.startTimer,
+    state.stopTimer,
     state.submitCurrentGuess,
     state.addLetterToCurrentGuess,
     state.removeLetterFromCurrentGuess,
@@ -59,6 +66,8 @@ const WordsGuesser = () => {
 
     const isGuessInWordsSet = wordsSet.has(currentGuessString)
     const isAlreadyGuess = guesses.includes(currentGuessString)
+
+    startTimer()
 
     switch (e.key) {
       case 'Enter':
@@ -146,6 +155,12 @@ const WordsGuesser = () => {
   }, [answer, currentGuess])
 
   useEffect(() => {
+    if (answer === lastGuess || guesses.length === TOTAL_GUESSES) {
+      stopTimer()
+    }
+  }, [answer, lastGuess, guesses.length, TOTAL_GUESSES])
+
+  useEffect(() => {
     window.addEventListener('keydown', onKeyPress)
     return () => {
       window.removeEventListener('keydown', onKeyPress)
@@ -168,6 +183,9 @@ const WordsGuesser = () => {
                 ? <>The answer was <Code fz='md'>{answer}</Code>.</>
                 : 'Congratulations!'
             }
+          </Text>
+          <Text>
+            Time: <Code fz='md'>{humanReadableSeconds(time)}</Code>
           </Text>
           <Button onClick={resetStore}>Play Again</Button>
         </Stack>

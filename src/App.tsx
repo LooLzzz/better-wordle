@@ -1,4 +1,4 @@
-import { Affix, Box, Burger, Stack, useComputedColorScheme } from '@mantine/core'
+import { Box, Burger, Stack, useComputedColorScheme } from '@mantine/core'
 import { useDisclosure, useMediaQuery } from '@mantine/hooks'
 import { Helmet } from 'react-helmet'
 
@@ -23,19 +23,17 @@ function App() {
         onClose={closeSidebar}
       />
 
-      <Affix
-        zIndex={0}
-        position={{
-          top: 10,
-          left: 10,
-        }}
+      <Box
+        pos='absolute'
+        top={10}
+        left={10}
       >
         <Burger
           opened={isSidebarOpened}
           onClick={toggleSidebar}
           opacity={0.6}
         />
-      </Affix>
+      </Box>
 
       <Stack className={classes.stack} h='100%' align='center' justify='center' gap={isXs ? 30 : 50}>
         <Box mah='60rem' style={{ justifySelf: 'start' }}>

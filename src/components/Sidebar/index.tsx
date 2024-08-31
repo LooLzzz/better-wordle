@@ -1,7 +1,8 @@
-import { Button, Divider, Drawer, DrawerProps, Stack, Switch, Title, useMantineColorScheme } from '@mantine/core'
+import { Button, Code, Divider, Drawer, DrawerProps, Group, Stack, Switch, Text, TextInput, Title, useMantineColorScheme } from '@mantine/core'
 
 import { MoonStarsIcon, SunIcon } from '@/assets'
 import { useWordleStore } from '@/hooks'
+import { humanReadableSeconds } from '@/utils'
 
 interface SidebarProps extends DrawerProps {
 
@@ -9,7 +10,13 @@ interface SidebarProps extends DrawerProps {
 
 const Sidebar = ({ opened, onClose, ...props }: SidebarProps) => {
   const { colorScheme, toggleColorScheme } = useMantineColorScheme()
-  const resetStore = useWordleStore((state) => state.resetStore)
+  const [
+    resetStore,
+    time,
+  ] = useWordleStore((state) => [
+    state.resetStore,
+    state.time,
+  ])
 
   const handleResetStore = () => {
     resetStore()
@@ -24,6 +31,12 @@ const Sidebar = ({ opened, onClose, ...props }: SidebarProps) => {
       {...props}
     >
       <Stack>
+        <Text>
+          Session Time: <Code fz='sm'>{humanReadableSeconds(time, 1)}</Code>
+        </Text>
+
+        <Divider />
+
         <Switch
           color='dark.4'
           label='Dark mode'
@@ -33,7 +46,7 @@ const Sidebar = ({ opened, onClose, ...props }: SidebarProps) => {
           onLabel={<MoonStarsIcon strokeWidth={2.5} width='1rem' color='var(--mantine-color-blue-6)' />}
           offLabel={<SunIcon strokeWidth={2.5} width='1rem' color='var(--mantine-color-yellow-7)' />}
         />
-        <Divider />
+
         <Button onClick={handleResetStore}>
           Restart Game
         </Button>

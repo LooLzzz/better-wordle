@@ -35,7 +35,14 @@ const cssResolver: CSSVariablesResolver = (theme) => ({
 })
 
 const theme = createTheme({
-
+  components: {
+    Code: {
+      defaultProps: {
+        bg: 'gray',
+        c: 'var(--mantine-primary-color-contrast)',
+      }
+    }
+  }
 })
 
 createRoot(document.getElementById('root')!).render(
