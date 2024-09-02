@@ -1,4 +1,12 @@
 
+const secondsToHms = (seconds: number) => {
+  var h = Math.floor(seconds / 3600).toString().padStart(2, '0')
+  var m = Math.floor(seconds % 3600 / 60).toString().padStart(2, '0')
+  var s = Math.floor(seconds % 3600 % 60).toString().padStart(2, '0')
+
+  return `${h}:${m}:${s}`
+}
+
 const humanReadableSeconds = (seconds: number, precision: number = 1) => {
   const prefixes = [
     'second',
@@ -27,5 +35,6 @@ const humanReadableSeconds = (seconds: number, precision: number = 1) => {
 }
 
 export {
-  humanReadableSeconds
+  humanReadableSeconds,
+  secondsToHms
 }

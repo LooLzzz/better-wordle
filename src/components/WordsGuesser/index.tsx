@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { wordsSet } from '@/assets'
 import { useWordleStore } from '@/hooks'
-import { humanReadableSeconds } from '@/utils'
+import { secondsToHms } from '@/utils'
 
 import Guess from './Guess'
 import classes from './index.module.scss'
@@ -185,7 +185,7 @@ const WordsGuesser = () => {
             }
           </Text>
           <Text>
-            Time: <Code fz='md'>{humanReadableSeconds(time)}</Code>
+            Time: <Code fz='md'>{secondsToHms(time)}</Code>
           </Text>
           <Button onClick={resetStore}>Play Again</Button>
         </Stack>

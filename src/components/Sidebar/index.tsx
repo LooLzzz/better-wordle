@@ -2,7 +2,7 @@ import { Button, Code, Divider, Drawer, DrawerProps, Stack, Switch, Text, Title,
 
 import { MoonStarsIcon, SunIcon } from '@/assets'
 import { useWordleStore } from '@/hooks'
-import { humanReadableSeconds } from '@/utils'
+import { secondsToHms } from '@/utils'
 
 interface SidebarProps extends DrawerProps {
 
@@ -32,7 +32,7 @@ const Sidebar = ({ opened, onClose, ...props }: SidebarProps) => {
     >
       <Stack>
         <Text>
-          Session Time: <Code fz='sm'>{humanReadableSeconds(time, 1)}</Code>
+          Session Time: <Code fz='sm'>{secondsToHms(time)}</Code>
         </Text>
 
         <Divider />

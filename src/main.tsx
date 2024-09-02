@@ -59,5 +59,5 @@ createRoot(document.getElementById('root')!).render(
       />
       <App />
     </MantineProvider>
-  </StrictMode>,
+  </StrictMode>
 )
