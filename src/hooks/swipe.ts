@@ -23,7 +23,7 @@ const useSwipe = ({ left, right, up, down }: SwipeOptions = {}) => {
       touchCoordsRef.current.touchStart.time = Date.now()
     }
     const handleTouchEnd = (e: TouchEvent) => {
-      const threshold = 150
+      const threshold = 100
       const swipeSpeed = 1 // sec;
       const touchEndX = e.changedTouches[0].clientX
       const touchEndY = e.changedTouches[0].clientY
