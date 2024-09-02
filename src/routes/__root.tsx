@@ -1,7 +1,6 @@
 import { Box, Burger, useComputedColorScheme } from '@mantine/core'
 import { useDisclosure } from '@mantine/hooks'
 import { Outlet, createRootRoute } from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/router-devtools'
 import { Helmet } from 'react-helmet'
 
 import { Sidebar } from '@/components'
@@ -35,7 +34,6 @@ export const Route = createRootRoute({
         </Box>
 
         <Outlet />
-        <TanStackRouterDevtools />
       </>
     )
   },
