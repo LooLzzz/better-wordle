@@ -1,15 +1,32 @@
-import { Button, Code, Divider, Drawer, DrawerProps, Stack, Switch, Text, Title, useMantineColorScheme } from '@mantine/core'
+import { Button, Code, Divider, Drawer, DrawerProps, NavLink, NavLinkProps, Stack, Switch, Text, Title, useMantineColorScheme } from '@mantine/core'
+import { Link, LinkProps, useMatchRoute } from '@tanstack/react-router'
 
 import { MoonStarsIcon, SunIcon } from '@/assets'
-import { useWordleStore } from '@/hooks'
+import { useSwipe, useWordleStore } from '@/hooks'
 import { secondsToHms } from '@/utils'
 
 interface SidebarProps extends DrawerProps {
 
 }
 
+const NavRouterLink = ({ label, to, ...props }: LinkProps & NavLinkProps) => {
+  const matchRoute = useMatchRoute()
+
+  return (
+    <NavLink
+      active={!!matchRoute({ to })}
+      component={Link}
+      to={to}
+      label={label}
+      rightSection={
+        <span style={{ fontFamily: 'monospace' }}>{'>'}</span>
+      }
+      {...props}
+    />
+  )
+}
+
 const Sidebar = ({ opened, onClose, ...props }: SidebarProps) => {
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme()
   const [
     resetStore,
     time,
@@ -17,6 +34,11 @@ const Sidebar = ({ opened, onClose, ...props }: SidebarProps) => {
     state.resetStore,
     state.time,
   ])
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme()
+
+  useSwipe({
+    left: onClose
+  })
 
   const handleResetStore = () => {
     resetStore()
@@ -35,8 +57,6 @@ const Sidebar = ({ opened, onClose, ...props }: SidebarProps) => {
           Session Time: <Code fz='sm'>{secondsToHms(time)}</Code>
         </Text>
 
-        <Divider />
-
         <Switch
           color='dark.4'
           label='Dark mode'
@@ -46,6 +66,21 @@ const Sidebar = ({ opened, onClose, ...props }: SidebarProps) => {
           onLabel={<MoonStarsIcon strokeWidth={2.5} width='1rem' color='var(--mantine-color-blue-6)' />}
           offLabel={<SunIcon strokeWidth={2.5} width='1rem' color='var(--mantine-color-yellow-7)' />}
         />
+
+        <Divider />
+
+        <Stack gap={0}>
+          <NavRouterLink
+            to='/'
+            label='Wordle'
+          />
+          <NavRouterLink
+            to='/helper'
+            label='Helper'
+          />
+        </Stack>
+
+        <Divider />
 
         <Button onClick={handleResetStore}>
           Restart Game

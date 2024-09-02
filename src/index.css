@@ -8,3 +8,9 @@ body {
   touch-action: pan-x pan-y;
   padding: 0 0;
 }
+
+.mantine-NavLink-root[data-active] {
+  border-left: 1px solid var(--mantine-primary-color-light-color);
+  font-weight: 500;
+  color: var(--mantine-color-default-color);
+}
