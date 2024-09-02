@@ -1,5 +1,6 @@
 import { Button, Code, Divider, Drawer, DrawerProps, NavLink, NavLinkProps, Stack, Switch, Text, Title, useMantineColorScheme } from '@mantine/core'
-import { Link, LinkProps, useMatchRoute } from '@tanstack/react-router'
+import { Link, LinkProps, useLocation, useMatchRoute } from '@tanstack/react-router'
+import { useEffect } from 'react'
 
 import { MoonStarsIcon, SunIcon } from '@/assets'
 import { useSwipe, useWordleStore } from '@/hooks'
@@ -34,16 +35,21 @@ const Sidebar = ({ opened, onClose, ...props }: SidebarProps) => {
     state.resetStore,
     state.time,
   ])
+  const location = useLocation()
   const { colorScheme, toggleColorScheme } = useMantineColorScheme()
-
-  useSwipe({
-    left: onClose
-  })
 
   const handleResetStore = () => {
     resetStore()
     onClose()
   }
+
+  useSwipe({
+    left: onClose
+  })
+
+  useEffect(() => {
+    onClose()
+  }, [location])
 
   return (
     <Drawer
