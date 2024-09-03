@@ -1,9 +1,10 @@
-import { Box, Button, Code, Modal, Stack, Text, Title } from '@mantine/core'
-import { useMediaQuery } from '@mantine/hooks'
+import { Box, Button, Center, Code, Image, Modal, Stack, Text, Title } from '@mantine/core'
+import { useDisclosure, useMediaQuery } from '@mantine/hooks'
 import { notifications } from '@mantine/notifications'
 import { useCallback, useEffect, useState } from 'react'
 
 import { wordsSet } from '@/assets'
+import gitgudImageSrc from '@/assets/gitgud.jpg'
 import { useWordleStore } from '@/hooks'
 import { secondsToHms } from '@/utils'
 
@@ -18,22 +19,26 @@ const WordsGuesser = () => {
     currentGuess,
     guesses,
     time,
+    numberOfInvalidGuesses,
     startTimer,
     stopTimer,
     submitCurrentGuess,
     addLetterToCurrentGuess,
     removeLetterFromCurrentGuess,
+    setNumberOfInvalidGuesses,
     resetStore,
   ] = useWordleStore((state) => [
     state.answer,
     state.currentGuess,
     state.guesses,
     state.time,
+    state.numberOfInvalidGuesses,
     state.startTimer,
     state.stopTimer,
     state.submitCurrentGuess,
     state.addLetterToCurrentGuess,
     state.removeLetterFromCurrentGuess,
+    state.setNumberOfInvalidGuesses,
     state.resetStore,
   ])
 
@@ -41,6 +46,7 @@ const WordsGuesser = () => {
   const [selectedIdx, setSelectedIdx] = useState<number | undefined>(undefined)
   const [shake, setShake] = useState(false)
   const [isFirstGuessInSession, setIsFirstGuessInSession] = useState(true)
+  const [isModalOpen, { open: openModal, close: closeModal }] = useDisclosure()
 
   const activeGuessIdx = guesses.length
   const lastGuess = guesses.at(-1)
@@ -81,6 +87,7 @@ const WordsGuesser = () => {
               setShake(false)
             }, 250)
             if (!isGuessInWordsSet) {
+              setNumberOfInvalidGuesses(value => value + 1)
               notifications.show({
                 title: 'Invalid Guess',
                 message: 'Not a valid word!',
@@ -161,6 +168,14 @@ const WordsGuesser = () => {
   }, [answer, lastGuess, guesses.length, TOTAL_GUESSES])
 
   useEffect(() => {
+    if (answer === lastGuess || guesses.length === TOTAL_GUESSES) {
+      setTimeout(openModal, 500 * 5)
+    } else {
+      closeModal()
+    }
+  }, [answer, lastGuess, guesses])
+
+  useEffect(() => {
     window.addEventListener('keydown', onKeyPress)
     return () => {
       window.removeEventListener('keydown', onKeyPress)
@@ -170,24 +185,37 @@ const WordsGuesser = () => {
   return (
     <>
       <Modal
-        opened={answer === lastGuess || guesses.length === TOTAL_GUESSES}
+        opened={isModalOpen}
         trapFocus={false}
-        onClose={() => { }}
-        withCloseButton={false}
+        onClose={closeModal}
         title={<Title order={3}>{answer !== lastGuess && guesses.length === TOTAL_GUESSES ? 'You Lost!' : 'You Won!'}</Title>}
       >
         <Stack h='100%'>
           <Text>
             {
               answer !== lastGuess && guesses.length === TOTAL_GUESSES
-                ? <>The answer was <Code fz='md'>{answer}</Code>.</>
-                : 'Congratulations!'
+                ? <>
+                  <Text pb='xs'>The answer was <Code>{answer}</Code>.</Text>
+                  <Text>You couldn't even guess it after <Code>{TOTAL_GUESSES}</Code> guesses, of which <Code>{numberOfInvalidGuesses}</Code> were invalid.</Text>
+                  <Text pb='md'>Better luck next time! 🍀</Text>
+                  <Center>
+                    <Image
+                      w={250}
+                      src={gitgudImageSrc}
+                    />
+                  </Center>
+                </>
+                : <>
+                  <Text pb='xs'>You managed to guess <Code>{answer}</Code>!</Text>
+                  <Text>It only took you <Code>{numberOfInvalidGuesses + guesses.length}</Code> guesses, of which <Code>{numberOfInvalidGuesses}</Code> were invalid.</Text>
+                  <Text>But who's counting 😉</Text>
+                </>
             }
           </Text>
           <Text>
-            Time: <Code fz='md'>{secondsToHms(time)}</Code>
+            Time: <Code>{secondsToHms(time)}</Code>
           </Text>
-          <Button onClick={resetStore}>Play Again</Button>
+          <Button onClick={() => { closeModal(); resetStore() }}>Play Again</Button>
         </Stack>
       </Modal>
 

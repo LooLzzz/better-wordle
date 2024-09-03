@@ -114,7 +114,7 @@ const Sidebar = ({ opened, onClose, ...props }: SidebarProps) => {
             <Drawer.Body flex={1}>
               <Stack h='100%'>
                 <Text>
-                  Session Time: <Code fz='sm'>{secondsToHms(time)}</Code>
+                  Session Time: <Code>{secondsToHms(time)}</Code>
                 </Text>
 
                 <Divider />

@@ -8,6 +8,7 @@ interface WordleStateValues {
   guesses: string[]
   time: number
   currentGuess: (null | string)[]
+  numberOfInvalidGuesses: number
 }
 
 interface WordleStateActions {
@@ -19,6 +20,7 @@ interface WordleStateActions {
   removeLetterFromCurrentGuess: (idx?: number) => void
   submitCurrentGuess: () => void
   clearCurrentGuess: () => void
+  setNumberOfInvalidGuesses: (setter: (value: number) => number) => void
 }
 
 type WordleState = WordleStateValues & WordleStateActions
@@ -30,6 +32,7 @@ const initialState: WordleStateValues = {
   guesses: [],
   time: 0,
   currentGuess: [null, null, null, null, null],
+  numberOfInvalidGuesses: 0,
 }
 
 let timer: NodeJS.Timeout | null = null
@@ -85,6 +88,8 @@ const useWordleStore = create<WordleState>()(
           ],
           currentGuess: [null, null, null, null, null],
         })),
+
+        setNumberOfInvalidGuesses: (setter) => { set({ numberOfInvalidGuesses: setter(get().numberOfInvalidGuesses) }) }
       }),
       {
         name: 'better-wordle-store',

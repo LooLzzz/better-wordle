@@ -37,6 +37,7 @@ const theme = createTheme({
     },
     Code: {
       defaultProps: {
+        fz: 'inherit',
         bg: 'gray',
         c: 'var(--mantine-primary-color-contrast)',
       }
