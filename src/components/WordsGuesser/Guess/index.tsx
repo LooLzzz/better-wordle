@@ -59,7 +59,7 @@ const Guess = ({
             onClick={() => onSelectIdx?.(idx)}
             data-letter-state={getLetterState(letter, idx)}
           >
-            <Text fz='inherit' fw='bold'>
+            <Text fw='bold'>
               {letter}
             </Text>
           </Paper>

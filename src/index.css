@@ -10,7 +10,7 @@ body {
 }
 
 .mantine-NavLink-root[data-active] {
-  border-left: 1px solid var(--mantine-primary-color-light-color);
+  border-left: 2px solid var(--mantine-primary-color-light-color);
   font-weight: 500;
   color: var(--mantine-color-default-color);
 }

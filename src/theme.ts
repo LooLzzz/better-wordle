@@ -1,4 +1,4 @@
-import { CSSVariablesResolver, createTheme, localStorageColorSchemeManager } from '@mantine/core'
+import { CSSVariablesResolver, DefaultMantineColor, createTheme, localStorageColorSchemeManager } from '@mantine/core'
 
 
 const colorSchemeManager = localStorageColorSchemeManager({
@@ -27,7 +27,14 @@ const cssResolver: CSSVariablesResolver = (theme) => ({
 })
 
 const theme = createTheme({
+  primaryColor: 'indigo' as DefaultMantineColor,
+
   components: {
+    Text: {
+      defaultProps: {
+        fz: 'inherit',
+      }
+    },
     Code: {
       defaultProps: {
         bg: 'gray',

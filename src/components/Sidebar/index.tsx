@@ -1,12 +1,30 @@
-import { Button, Code, Divider, Drawer, DrawerProps, NavLink, NavLinkProps, Stack, Switch, Text, Title, useMantineColorScheme } from '@mantine/core'
+import {
+  Anchor,
+  Box,
+  Button,
+  Code,
+  Divider,
+  Drawer,
+  DrawerRootProps,
+  Image,
+  NavLink,
+  NavLinkProps,
+  Paper,
+  Space,
+  Stack,
+  Text,
+  Title,
+  useMantineColorScheme
+} from '@mantine/core'
 import { Link, LinkProps, useLocation, useMatchRoute } from '@tanstack/react-router'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
 import { MoonStarsIcon, SunIcon } from '@/assets'
 import { useSwipe, useWordleStore } from '@/hooks'
 import { secondsToHms } from '@/utils'
+import { useMouse } from '@mantine/hooks'
 
-interface SidebarProps extends DrawerProps {
+interface SidebarProps extends DrawerRootProps {
 
 }
 
@@ -19,10 +37,12 @@ const NavRouterLink = ({ label, to, ...props }: LinkProps & NavLinkProps) => {
       component={Link}
       to={to}
       label={label}
-      rightSection={
-        <span style={{ fontFamily: 'monospace' }}>{'>'}</span>
-      }
+      rightSection={<Text ff='monospace'>{'>'}</Text>}
       {...props}
+      style={{
+        borderRadius: 'var(--mantine-radius-sm)',
+        ...props.style,
+      }}
     />
   )
 }
@@ -35,8 +55,10 @@ const Sidebar = ({ opened, onClose, ...props }: SidebarProps) => {
     state.resetStore,
     state.time,
   ])
-  const location = useLocation()
   const { colorScheme, toggleColorScheme } = useMantineColorScheme()
+  const [hovered, setHovered] = useState(false)
+  const mouse = useMouse()
+  const location = useLocation()
 
   const handleResetStore = () => {
     resetStore()
@@ -52,47 +74,124 @@ const Sidebar = ({ opened, onClose, ...props }: SidebarProps) => {
   }, [location])
 
   return (
-    <Drawer
-      opened={opened}
-      onClose={onClose}
-      title={<Title order={2}>Settings</Title>}
-      {...props}
-    >
-      <Stack>
-        <Text>
-          Session Time: <Code fz='sm'>{secondsToHms(time)}</Code>
-        </Text>
+    <>
+      {
+        hovered && (
+          <Paper
+            pos='absolute'
+            top={mouse.y - (80 * 1.2)}
+            left={mouse.x - (80 * 0.5)}
+            radius='lg'
+            shadow='sm'
+            style={{
+              zIndex: 999,
+              overflow: 'hidden',
+            }}
+          >
+            <Image
+              src='https://avatars.githubusercontent.com/u/8081213'
+              w={80}
+            />
+          </Paper>
+        )
+      }
 
-        <Switch
-          color='dark.4'
-          label='Dark mode'
-          size='md'
-          checked={colorScheme === 'dark'}
-          onChange={toggleColorScheme}
-          onLabel={<MoonStarsIcon strokeWidth={2.5} width='1rem' color='var(--mantine-color-blue-6)' />}
-          offLabel={<SunIcon strokeWidth={2.5} width='1rem' color='var(--mantine-color-yellow-7)' />}
-        />
+      <Drawer.Root
+        opened={opened}
+        onClose={onClose}
+        {...props}
+      >
+        <Drawer.Overlay />
+        <Drawer.Content>
+          <Stack h='100%' gap={0}>
+            <Drawer.Header>
+              <Drawer.Title>
+                <Title order={3}>Settings</Title>
+              </Drawer.Title>
+              <Drawer.CloseButton />
+            </Drawer.Header>
 
-        <Divider />
+            <Drawer.Body flex={1}>
+              <Stack h='100%'>
+                <Text>
+                  Session Time: <Code fz='sm'>{secondsToHms(time)}</Code>
+                </Text>
 
-        <Stack gap={0}>
-          <NavRouterLink
-            to='/'
-            label='Wordle'
-          />
-          <NavRouterLink
-            to='/helper'
-            label='Helper'
-          />
-        </Stack>
+                <Divider />
 
-        <Divider />
+                <NavLink
+                  active
+                  variant='subtle'
+                  label='Toggle Dark Mode'
+                  h='2rem'
+                  onClick={toggleColorScheme}
+                  leftSection={
+                    colorScheme === 'dark'
+                      ? <MoonStarsIcon strokeWidth={2.5} width='1rem' color='var(--mantine-color-blue-6)' />
+                      : <SunIcon strokeWidth={2.5} width='1rem' color='var(--mantine-color-yellow-7)' />
+                  }
+                  style={{
+                    borderRadius: 'var(--mantine-radius-md)',
+                    border: '0px'
+                  }}
+                />
+                {/* <Switch
+                  color='dark.4'
+                  label='Dark mode'
+                  size='sm'
+                  checked={colorScheme === 'dark'}
+                  onChange={toggleColorScheme}
+                  onLabel={<MoonStarsIcon strokeWidth={2.5} width='1rem' color='var(--mantine-color-blue-6)' />}
+                  offLabel={<SunIcon strokeWidth={2.5} width='1rem' color='var(--mantine-color-yellow-7)' />}
+                /> */}
 
-        <Button onClick={handleResetStore}>
-          Restart Game
-        </Button>
-      </Stack>
-    </Drawer>
+                <Stack gap={0}>
+                  <NavRouterLink
+                    to='/'
+                    label='Wordle'
+                  />
+                  <NavRouterLink
+                    to='/helper'
+                    label='Helper'
+                  />
+                </Stack>
+
+                <Space flex={1} />
+
+                <Button onClick={handleResetStore}>
+                  Restart Game
+                </Button>
+
+                <Divider />
+
+                <Box c='dimmed' fz='xs' style={{ textAlign: 'center' }}>
+                  <Text>
+                    {'Made with ❤️ by '}
+                    <Anchor
+                      href='https://github.com/LooLzzz'
+                      target='_blank'
+                      onMouseEnter={() => setHovered(true)}
+                      onMouseLeave={() => setHovered(false)}
+                    >
+                      LooLzzz
+                    </Anchor>
+                  </Text>
+                  <Text>
+                    {'Give it a ⭐ on '}
+                    <Anchor
+                      href='https://github.com/LooLzzz/better-wordle/stargazers'
+                      target='_blank'
+                    >
+                      GitHub
+                    </Anchor>
+                  </Text>
+                </Box>
+              </Stack>
+            </Drawer.Body>
+          </Stack>
+        </Drawer.Content>
+      </Drawer.Root>
+    </>
   )
 }
 
