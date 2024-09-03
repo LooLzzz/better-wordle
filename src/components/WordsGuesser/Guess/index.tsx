@@ -35,7 +35,15 @@ const Guess = ({
     }
 
     if (answerLetters.includes(letter)) {
-      return 'correct'
+      // look for 'correct' letters, but not 'perfect' letters
+      const correctLettersLocations = (
+        answerLetters
+          .filter((l, j) => l === letter && answerLetters[j] !== guessedLetters[j])
+      )
+
+      if (correctLettersLocations.length)
+        return 'correct'
+      return 'incorrect'
     }
 
     return 'incorrect'
