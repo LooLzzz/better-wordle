@@ -200,6 +200,8 @@ const WordsGuesser = () => {
                   <Text pb='md'>Better luck next time! 🍀</Text>
                   <Center>
                     <Image
+                      radius='md'
+                      style={{ boxShadow: 'var(--mantine-shadow-xs)' }}
                       w={250}
                       src={gitgudImageSrc}
                     />

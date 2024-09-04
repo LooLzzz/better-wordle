@@ -16,17 +16,16 @@ import {
   Title,
   useMantineColorScheme
 } from '@mantine/core'
+import { useMouse } from '@mantine/hooks'
 import { Link, LinkProps, useLocation, useMatchRoute } from '@tanstack/react-router'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { MoonStarsIcon, SunIcon } from '@/assets'
-import { useSwipe, useWordleStore } from '@/hooks'
+import { useDraggable, useWordleStore, type PositionDelta } from '@/hooks'
 import { secondsToHms } from '@/utils'
-import { useMouse } from '@mantine/hooks'
 
-interface SidebarProps extends DrawerRootProps {
+interface SidebarProps extends DrawerRootProps { }
 
-}
 
 const NavRouterLink = ({ label, to, ...props }: LinkProps & NavLinkProps) => {
   const matchRoute = useMatchRoute()
@@ -55,18 +54,34 @@ const Sidebar = ({ opened, onClose, ...props }: SidebarProps) => {
     state.resetStore,
     state.time,
   ])
+  const draggableRef = useRef<HTMLDivElement>(null)
   const { colorScheme, toggleColorScheme } = useMantineColorScheme()
   const [hovered, setHovered] = useState(false)
   const mouse = useMouse()
   const location = useLocation()
+  const [drawerOffsetX, setDrawerOffsetX] = useState(0)
 
   const handleResetStore = () => {
     resetStore()
     onClose()
   }
 
-  useSwipe({
-    left: onClose
+  const handleDragStop = ({ dx }: PositionDelta) => {
+    if (dx < -100) {
+      onClose()
+      setTimeout(() => {
+        setDrawerOffsetX(0)
+      }, 200)
+    } else {
+      setDrawerOffsetX(0)
+    }
+  }
+  const handleDrag = ({ dx }: PositionDelta) => {
+    setDrawerOffsetX(dx)
+  }
+  const { dragging } = useDraggable(draggableRef, {
+    onDrag: handleDrag,
+    onStop: handleDragStop
   })
 
   useEffect(() => {
@@ -102,94 +117,97 @@ const Sidebar = ({ opened, onClose, ...props }: SidebarProps) => {
         {...props}
       >
         <Drawer.Overlay />
-        <Drawer.Content>
-          <Stack h='100%' gap={0}>
-            <Drawer.Header>
-              <Drawer.Title>
-                <Title order={3}>Settings</Title>
-              </Drawer.Title>
-              <Drawer.CloseButton />
-            </Drawer.Header>
+        <Box
+          ref={draggableRef}
 
-            <Drawer.Body flex={1}>
-              <Stack h='100%'>
-                <Text>
-                  Session Time: <Code>{secondsToHms(time)}</Code>
-                </Text>
+        >
+          <Drawer.Content
+            style={{
+              transform: `translateX(${Math.min(drawerOffsetX, 0)}px)`,
+              transitionProperty: !opened || dragging ? undefined : 'transform',
+              transitionDuration: !opened || dragging ? undefined : '0.2s',
+              transitionTimingFunction: !opened || dragging ? undefined : 'ease',
+            }}
+          >
+            <Stack h='100%' gap={0}>
+              <Drawer.Header>
+                <Drawer.Title>
+                  <Title order={3}>Settings</Title>
+                </Drawer.Title>
+                <Drawer.CloseButton />
+              </Drawer.Header>
 
-                <Divider />
+              <Drawer.Body flex={1}>
+                <Stack h='100%'>
+                  <Text>
+                    Session Time: <Code>{secondsToHms(time)}</Code>
+                  </Text>
 
-                <NavLink
-                  active
-                  variant='subtle'
-                  label='Toggle Dark Mode'
-                  h='2rem'
-                  onClick={toggleColorScheme}
-                  leftSection={
-                    colorScheme === 'dark'
-                      ? <MoonStarsIcon strokeWidth={2.5} width='1rem' color='var(--mantine-color-blue-6)' />
-                      : <SunIcon strokeWidth={2.5} width='1rem' color='var(--mantine-color-yellow-7)' />
-                  }
-                  style={{
-                    borderRadius: 'var(--mantine-radius-md)',
-                    border: '0px'
-                  }}
-                />
-                {/* <Switch
-                  color='dark.4'
-                  label='Dark mode'
-                  size='sm'
-                  checked={colorScheme === 'dark'}
-                  onChange={toggleColorScheme}
-                  onLabel={<MoonStarsIcon strokeWidth={2.5} width='1rem' color='var(--mantine-color-blue-6)' />}
-                  offLabel={<SunIcon strokeWidth={2.5} width='1rem' color='var(--mantine-color-yellow-7)' />}
-                /> */}
+                  <Divider />
 
-                <Stack gap={0}>
-                  <NavRouterLink
-                    to='/'
-                    label='Wordle'
+                  <NavLink
+                    active
+                    variant='subtle'
+                    label='Toggle Dark Mode'
+                    h='2rem'
+                    onClick={toggleColorScheme}
+                    leftSection={
+                      colorScheme === 'dark'
+                        ? <MoonStarsIcon strokeWidth={2.5} width='1rem' color='var(--mantine-color-blue-6)' />
+                        : <SunIcon strokeWidth={2.5} width='1rem' color='var(--mantine-color-yellow-7)' />
+                    }
+                    style={{
+                      borderRadius: 'var(--mantine-radius-md)',
+                      border: '0px'
+                    }}
                   />
-                  <NavRouterLink
-                    to='/helper'
-                    label='Helper'
-                  />
+
+                  <Stack gap={0}>
+                    <NavRouterLink
+                      to='/'
+                      label='Wordle'
+                    />
+                    <NavRouterLink
+                      to='/helper'
+                      label='Helper'
+                    />
+                  </Stack>
+
+                  <Space flex={1} />
+
+                  <Button onClick={handleResetStore}>
+                    Restart Game
+                  </Button>
+
+                  <Divider />
+
+                  <Box c='dimmed' fz='xs' style={{ textAlign: 'center' }}>
+                    <Text>
+                      {'Made with ❤️ by '}
+                      <Anchor
+                        href='https://github.com/LooLzzz'
+                        target='_blank'
+                        onMouseEnter={() => setHovered(true)}
+                        onMouseLeave={() => setHovered(false)}
+                      >
+                        LooLzzz
+                      </Anchor>
+                    </Text>
+                    <Text>
+                      {'Give it a ⭐ on '}
+                      <Anchor
+                        href='https://github.com/LooLzzz/better-wordle/stargazers'
+                        target='_blank'
+                      >
+                        GitHub
+                      </Anchor>
+                    </Text>
+                  </Box>
                 </Stack>
-
-                <Space flex={1} />
-
-                <Button onClick={handleResetStore}>
-                  Restart Game
-                </Button>
-
-                <Divider />
-
-                <Box c='dimmed' fz='xs' style={{ textAlign: 'center' }}>
-                  <Text>
-                    {'Made with ❤️ by '}
-                    <Anchor
-                      href='https://github.com/LooLzzz'
-                      target='_blank'
-                      onMouseEnter={() => setHovered(true)}
-                      onMouseLeave={() => setHovered(false)}
-                    >
-                      LooLzzz
-                    </Anchor>
-                  </Text>
-                  <Text>
-                    {'Give it a ⭐ on '}
-                    <Anchor
-                      href='https://github.com/LooLzzz/better-wordle/stargazers'
-                      target='_blank'
-                    >
-                      GitHub
-                    </Anchor>
-                  </Text>
-                </Box>
-              </Stack>
-            </Drawer.Body>
-          </Stack>
-        </Drawer.Content>
+              </Drawer.Body>
+            </Stack>
+          </Drawer.Content>
+        </Box>
       </Drawer.Root>
     </>
   )

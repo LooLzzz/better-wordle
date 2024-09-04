@@ -55,6 +55,4 @@ const useSwipe = ({ left, right, up, down }: SwipeOptions = {}) => {
   })
 }
 
-export {
-  useSwipe
-}
+export default useSwipe
