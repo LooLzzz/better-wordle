@@ -109,11 +109,15 @@ const WordsGuesser = () => {
       case 'Backspace':
         removeLetterFromCurrentGuess(selectedIdx)
         e.preventDefault()
+        if (selectedIdx !== undefined) {
+          setSelectedIdx(selectedIdx - 1 >= 0 ? selectedIdx - 1 : undefined)
+        }
         break
 
       case 'Delete':
         if (selectedIdx !== undefined) {
           removeLetterFromCurrentGuess(selectedIdx)
+          setSelectedIdx(selectedIdx - 1 >= 0 ? selectedIdx - 1 : undefined)
         }
         break
 
@@ -148,10 +152,9 @@ const WordsGuesser = () => {
             setTimeout(() => {
               addLetterToCurrentGuess(e.key, selectedIdx)
             }, 10)
-            setSelectedIdx(undefined)
+            setSelectedIdx(selectedIdx + 1 < currentGuess.length ? selectedIdx + 1 : undefined)
           } else {
             addLetterToCurrentGuess(e.key, selectedIdx)
-            setSelectedIdx(undefined)
           }
         }
     }
@@ -159,7 +162,7 @@ const WordsGuesser = () => {
 
   useEffect(() => {
     setSelectedIdx(undefined)
-  }, [answer, currentGuess])
+  }, [answer])
 
   useEffect(() => {
     if (answer === lastGuess || guesses.length === TOTAL_GUESSES) {
