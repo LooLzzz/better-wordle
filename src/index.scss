@@ -2,6 +2,13 @@ body {
   touch-action: pan-x pan-y;
 }
 
+html[data-mantine-color-scheme="light"] {
+  .mantine-ActionIcon-root {
+    --ai-bg: var(--mantine-color-gray-0) !important;
+    --ai-hover: var(--mantine-color-white) !important;
+  }
+}
+
 #root {
   transition: background-color 350ms ease;
   height: 100dvh;

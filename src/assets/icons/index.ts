@@ -1,5 +1,2 @@
-export { default as BackspaceIcon } from './backspace.svg?react'
-export { default as EnterIcon } from './enter.svg?react'
-export { default as MoonStarsIcon } from './moonstars.svg?react'
-export { default as SunIcon } from './sun.svg?react'
-export { default as WordleIcon } from './wordle-icon.svg?react'
+export { default as IconEnter } from './enter.svg?react'
+export { default as IconWordle } from './wordle-icon.svg?react'

@@ -11,10 +11,16 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as SettingsImport } from './routes/settings'
 import { Route as HelperImport } from './routes/helper'
 import { Route as IndexImport } from './routes/index'
 
 // Create/Update Routes
+
+const SettingsRoute = SettingsImport.update({
+  path: '/settings',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const HelperRoute = HelperImport.update({
   path: '/helper',
@@ -44,12 +50,23 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HelperImport
       parentRoute: typeof rootRoute
     }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsImport
+      parentRoute: typeof rootRoute
+    }
   }
 }
 
 // Create and export the route tree
 
-export const routeTree = rootRoute.addChildren({ IndexRoute, HelperRoute })
+export const routeTree = rootRoute.addChildren({
+  IndexRoute,
+  HelperRoute,
+  SettingsRoute,
+})
 
 /* prettier-ignore-end */
 
@@ -60,7 +77,8 @@ export const routeTree = rootRoute.addChildren({ IndexRoute, HelperRoute })
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/helper"
+        "/helper",
+        "/settings"
       ]
     },
     "/": {
@@ -68,6 +86,9 @@ export const routeTree = rootRoute.addChildren({ IndexRoute, HelperRoute })
     },
     "/helper": {
       "filePath": "helper.tsx"
+    },
+    "/settings": {
+      "filePath": "settings.tsx"
     }
   }
 }

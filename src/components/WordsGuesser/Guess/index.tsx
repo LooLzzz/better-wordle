@@ -5,6 +5,8 @@ import { useWordleStore } from '@/hooks'
 
 import classes from './index.module.scss'
 
+type LetterState = ('perfect' | 'correct' | 'incorrect' | undefined)
+
 interface GuessProps {
   active?: boolean
   revealAnimation?: boolean
@@ -13,6 +15,44 @@ interface GuessProps {
   onSelectIdx?: (idx: number) => void
 }
 
+interface GuessBlockProps extends Omit<GuessProps, 'guessedLetters' | 'selectedIdx' | 'onSelectIdx'> {
+  letter?: string | null
+  letterState?: LetterState
+  selected?: boolean
+  onClick?: () => void
+}
+
+
+const GuessBlock = ({
+  active = false,
+  revealAnimation = false,
+  selected = false,
+  letter,
+  letterState,
+  onClick,
+}: GuessBlockProps) => {
+  return (
+    <Paper
+      component={Center as any}
+      className={[
+        classes.letter,
+        active ? classes.active : '',
+        selected ? classes.selected : '',
+        letter ? classes.guessedLetter : '',
+        revealAnimation ? classes.reveal : '',
+      ].join(' ')}
+      radius='md'
+      onClick={onClick}
+      data-letter-state={letterState}
+      pb='0.15rem'
+      pr='0.1rem'
+    >
+      <Text fw='bold'>
+        {letter}
+      </Text>
+    </Paper>
+  )
+}
 
 const Guess = ({
   active = false,
@@ -25,7 +65,7 @@ const Guess = ({
   const answerLetters = answer.split('')
   const isEmptyGuess = guessedLetters.every(v => !v)
 
-  const getLetterState = useCallback((letter: string | null, idx: number) => {
+  const getLetterState = useCallback((letter: string | null, idx: number): LetterState => {
     if (!letter || active || isEmptyGuess) {
       return undefined
     }
@@ -53,24 +93,15 @@ const Guess = ({
     <Group className={classes.lettersContainer} align='center' justify='center'>
       {
         guessedLetters.map((letter, idx) => (
-          <Paper
+          <GuessBlock
             key={idx}
-            component={Center as any}
-            className={[
-              classes.letter,
-              active ? classes.active : '',
-              selectedIdx == idx ? classes.selected : '',
-              letter ? classes.guessedLetter : '',
-              revealAnimation ? classes.reveal : '',
-            ].join(' ')}
-            radius='md'
+            active={active}
+            selected={selectedIdx == idx}
+            letter={letter}
+            revealAnimation={revealAnimation}
             onClick={() => onSelectIdx?.(idx)}
-            data-letter-state={getLetterState(letter, idx)}
-          >
-            <Text fw='bold'>
-              {letter}
-            </Text>
-          </Paper>
+            letterState={getLetterState(letter, idx)}
+          />
         ))
       }
     </Group>
@@ -79,5 +110,8 @@ const Guess = ({
 
 export {
   Guess as default,
-  type GuessProps
+  GuessBlock,
+  type GuessBlockProps,
+  type GuessProps,
+  type LetterState
 }

@@ -1,4 +1,5 @@
 import {
+  ActionIcon,
   Anchor,
   Box,
   Button,
@@ -6,6 +7,7 @@ import {
   Divider,
   Drawer,
   DrawerRootProps,
+  Group,
   Image,
   NavLink,
   NavLinkProps,
@@ -17,10 +19,10 @@ import {
   useMantineColorScheme
 } from '@mantine/core'
 import { useMouse } from '@mantine/hooks'
+import { IconMoonStars, IconSun } from '@tabler/icons-react'
 import { Link, LinkProps, useLocation, useMatchRoute } from '@tanstack/react-router'
 import { useEffect, useRef, useState } from 'react'
 
-import { MoonStarsIcon, SunIcon } from '@/assets'
 import { useDraggable, useWordleStore, type PositionDelta } from '@/hooks'
 import { secondsToHms } from '@/utils'
 
@@ -48,11 +50,11 @@ const NavRouterLink = ({ label, to, ...props }: LinkProps & NavLinkProps) => {
 
 const Sidebar = ({ opened, onClose, ...props }: SidebarProps) => {
   const [
-    resetStore,
     time,
+    resetStore,
   ] = useWordleStore((state) => [
-    state.resetStore,
     state.time,
+    state.resetStore,
   ])
   const draggableRef = useRef<HTMLDivElement>(null)
   const { colorScheme, toggleColorScheme } = useMantineColorScheme()
@@ -117,10 +119,7 @@ const Sidebar = ({ opened, onClose, ...props }: SidebarProps) => {
         {...props}
       >
         <Drawer.Overlay />
-        <Box
-          ref={draggableRef}
-
-        >
+        <Box ref={draggableRef}>
           <Drawer.Content
             style={{
               transform: `translateX(${Math.min(drawerOffsetX, 0)}px)`,
@@ -131,10 +130,22 @@ const Sidebar = ({ opened, onClose, ...props }: SidebarProps) => {
           >
             <Stack h='100%' gap={0}>
               <Drawer.Header>
-                <Drawer.Title>
+                <Drawer.Title flex={1}>
                   <Title order={3}>Settings</Title>
                 </Drawer.Title>
-                <Drawer.CloseButton />
+                <Group gap='0.3rem'>
+                  <ActionIcon
+                    variant='default'
+                    onClick={toggleColorScheme}
+                  >
+                    {
+                      colorScheme === 'dark'
+                        ? <IconMoonStars strokeWidth={2.5} width='1rem' color='var(--mantine-color-blue-6)' />
+                        : <IconSun strokeWidth={2.5} width='1rem' color='var(--mantine-color-yellow-7)' />
+                    }
+                  </ActionIcon>
+                  <Drawer.CloseButton />
+                </Group>
               </Drawer.Header>
 
               <Drawer.Body flex={1}>
@@ -145,23 +156,6 @@ const Sidebar = ({ opened, onClose, ...props }: SidebarProps) => {
 
                   <Divider />
 
-                  <NavLink
-                    active
-                    variant='subtle'
-                    label='Toggle Dark Mode'
-                    h='2rem'
-                    onClick={toggleColorScheme}
-                    leftSection={
-                      colorScheme === 'dark'
-                        ? <MoonStarsIcon strokeWidth={2.5} width='1rem' color='var(--mantine-color-blue-6)' />
-                        : <SunIcon strokeWidth={2.5} width='1rem' color='var(--mantine-color-yellow-7)' />
-                    }
-                    style={{
-                      borderRadius: 'var(--mantine-radius-md)',
-                      border: '0px'
-                    }}
-                  />
-
                   <Stack gap={0}>
                     <NavRouterLink
                       to='/'
@@ -170,6 +164,10 @@ const Sidebar = ({ opened, onClose, ...props }: SidebarProps) => {
                     <NavRouterLink
                       to='/helper'
                       label='Helper'
+                    />
+                    <NavRouterLink
+                      to='/settings'
+                      label='Settings'
                     />
                   </Stack>
 

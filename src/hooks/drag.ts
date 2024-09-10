@@ -15,6 +15,8 @@ interface DraggableState extends PositionDelta {
 }
 
 interface DraggableOptions {
+  disableTouch?: boolean
+  disableMouse?: boolean
   onStart?: (state: Position) => void
   onDrag?: (state: PositionDelta) => void
   onStop?: (state: PositionDelta) => void
@@ -99,8 +101,8 @@ const useDraggable = (ref: RefObject<HTMLElement>, options: DraggableOptions = {
   }
 
   useEffect(() => {
-    ref.current?.addEventListener('mousedown', handleMouseDown)
-    ref.current?.addEventListener('touchstart', handleTouchStart)
+    !options?.disableMouse && ref.current?.addEventListener('mousedown', handleMouseDown)
+    !options?.disableTouch && ref.current?.addEventListener('touchstart', handleTouchStart)
     return () => {
       ref.current?.removeEventListener('mousedown', handleMouseDown)
       ref.current?.removeEventListener('touchstart', handleTouchStart)

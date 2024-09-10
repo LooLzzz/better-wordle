@@ -1,3 +1,4 @@
+import { DEFAULT_THEME } from '@mantine/core'
 import { create } from 'zustand'
 import { devtools, persist } from 'zustand/middleware'
 
@@ -9,6 +10,11 @@ interface WordleStateValues {
   time: number
   currentGuess: (null | string)[]
   numberOfInvalidGuesses: number
+
+  blockColors: {
+    correct: string,
+    perfect: string,
+  }
 }
 
 interface WordleStateActions {
@@ -21,6 +27,8 @@ interface WordleStateActions {
   submitCurrentGuess: () => void
   clearCurrentGuess: () => void
   setNumberOfInvalidGuesses: (setter: (value: number) => number) => void
+
+  setBlockColor: (key: 'correct' | 'perfect', color: string) => void
 }
 
 type WordleState = WordleStateValues & WordleStateActions
@@ -33,6 +41,10 @@ const initialState: WordleStateValues = {
   time: 0,
   currentGuess: [null, null, null, null, null],
   numberOfInvalidGuesses: 0,
+  blockColors: {
+    perfect: DEFAULT_THEME.colors.green[9],
+    correct: DEFAULT_THEME.colors.yellow[9],
+  }
 }
 
 let timer: NodeJS.Timeout | null = null
@@ -44,11 +56,12 @@ const useWordleStore = create<WordleState>()(
         ...initialState,
 
         resetStore: () => {
-          set({
-            ...initialState,
-            answer: generateRandomWord(),
-          })
           get().stopTimer()
+          set(({ blockColors }) => ({
+            ...initialState,
+            blockColors,
+            answer: generateRandomWord(),
+          }))
         },
 
         startTimer: () => {
@@ -89,7 +102,14 @@ const useWordleStore = create<WordleState>()(
           currentGuess: [null, null, null, null, null],
         })),
 
-        setNumberOfInvalidGuesses: (setter) => { set({ numberOfInvalidGuesses: setter(get().numberOfInvalidGuesses) }) }
+        setNumberOfInvalidGuesses: (setter) => { set({ numberOfInvalidGuesses: setter(get().numberOfInvalidGuesses) }) },
+
+        setBlockColor: (key, color) => set(({ blockColors }) => ({
+          blockColors: {
+            ...blockColors,
+            [key]: color
+          }
+        })),
       }),
       {
         name: 'better-wordle-store',
@@ -112,5 +132,7 @@ if (useWordleStore.getState()?.guesses.at(-1) === useWordleStore.getState()?.ans
 
 export {
   useWordleStore as default,
+  generateRandomWord,
+  initialState,
   type WordleState
 }
