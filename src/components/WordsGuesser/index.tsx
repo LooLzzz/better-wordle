@@ -5,7 +5,7 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { wordsSet } from '@/assets'
 import gitgudImageSrc from '@/assets/gitgud.jpg'
-import { useWordleStore } from '@/hooks'
+import { useSwipe, useWordleStore } from '@/hooks'
 import { secondsToHms } from '@/utils'
 
 import Guess from './Guess'
@@ -159,6 +159,11 @@ const WordsGuesser = () => {
         }
     }
   }, [lastGuess, currentGuess, currentGuessString, numberOfEmptyLetters, selectedIdx, wordsSet])
+
+  useSwipe({
+    left: () => setSelectedIdx((prev) => (prev === undefined ? currentGuess.length - 1 : (prev + currentGuess.length - 1) % currentGuess.length)),
+    right: () => setSelectedIdx((prev) => (prev === undefined ? 0 : (prev + 1) % currentGuess.length)),
+  })
 
   useEffect(() => {
     setSelectedIdx(undefined)
