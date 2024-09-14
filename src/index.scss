@@ -1,5 +1,5 @@
 body {
-  touch-action: pan-x pan-y;
+  overflow: hidden;
 }
 
 html[data-mantine-color-scheme="light"] {
